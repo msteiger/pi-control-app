@@ -15,6 +15,20 @@ public class RelayInfo {
     private int gpioPin;
     private List<TriggerTime> triggers = new ArrayList<>();
 
+    private RelayInfo() {
+    }
+
+    public  RelayInfo(String id, int gpioPin) {
+        this.id = id;
+        this.gpioPin = gpioPin;
+    }
+
+    public  RelayInfo(String id, int gpioPin, String name) {
+        this.id = id;
+        this.gpioPin = gpioPin;
+        this.name = name;
+    }
+
     /**
      * @return the id
      */

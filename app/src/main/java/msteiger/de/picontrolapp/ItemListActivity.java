@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,9 +17,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
-import msteiger.de.picontrolapp.dummy.DummyContent;
 import msteiger.de.picontrolapp.dummy.RelayInfo;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -79,9 +81,11 @@ public class ItemListActivity extends AppCompatActivity {
         return false;
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        List<RelayInfo> itemList = new ItemProvider().retrieveAll();
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, itemList, mTwoPane));
+    private void setupRecyclerView(@NonNull final RecyclerView recyclerView) {
+        final SimpleItemRecyclerViewAdapter adapter = new SimpleItemRecyclerViewAdapter(this, mTwoPane);
+        final HttpRequestTask task = new HttpRequestTask(adapter);
+        recyclerView.setAdapter(adapter);
+        task.execute();
     }
 
     public static class SimpleItemRecyclerViewAdapter
@@ -93,10 +97,10 @@ public class ItemListActivity extends AppCompatActivity {
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DummyContent.DummyItem item = (DummyContent.DummyItem) view.getTag();
+                RelayInfo item = (RelayInfo) view.getTag();
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
-                    arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.id);
+                    arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.getId());
                     ItemDetailFragment fragment = new ItemDetailFragment();
                     fragment.setArguments(arguments);
                     mParentActivity.getSupportFragmentManager().beginTransaction()
@@ -105,7 +109,7 @@ public class ItemListActivity extends AppCompatActivity {
                 } else {
                     Context context = view.getContext();
                     Intent intent = new Intent(context, ItemDetailActivity.class);
-                    intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, item.id);
+                    intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, item.getId());
 
                     context.startActivity(intent);
                 }
@@ -113,11 +117,17 @@ public class ItemListActivity extends AppCompatActivity {
         };
 
         SimpleItemRecyclerViewAdapter(ItemListActivity parent,
-                                      List<RelayInfo> items,
                                       boolean twoPane) {
-            mValues = items;
+            mValues = new ArrayList<>();
             mParentActivity = parent;
             mTwoPane = twoPane;
+        }
+
+        public void setData(Collection<RelayInfo> infos) {
+            mValues.clear();
+            notifyItemRangeRemoved(0, mValues.size());
+            mValues.addAll(infos);
+            notifyItemRangeInserted(0,mValues.size());
         }
 
         @Override

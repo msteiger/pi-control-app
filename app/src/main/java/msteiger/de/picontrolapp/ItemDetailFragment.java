@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import msteiger.de.picontrolapp.dummy.DummyContent;
+import msteiger.de.picontrolapp.dummy.RelayInfo;
 
 /**
  * A fragment representing a single Item detail screen.
@@ -27,7 +27,7 @@ public class ItemDetailFragment extends Fragment {
     /**
      * The dummy content this fragment is presenting.
      */
-    private DummyContent.DummyItem mItem;
+    private RelayInfo mItem;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
