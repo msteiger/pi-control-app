@@ -1,20 +1,14 @@
 package msteiger.de.picontrolapp;
 
+import android.os.AsyncTask;
+import android.util.Log;
+
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
-import android.os.AsyncTask;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Callable;
-
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import msteiger.de.picontrolapp.dummy.RelayInfo;
 

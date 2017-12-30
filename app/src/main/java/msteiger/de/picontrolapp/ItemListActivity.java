@@ -116,8 +116,7 @@ public class ItemListActivity extends AppCompatActivity {
             }
         };
 
-        SimpleItemRecyclerViewAdapter(ItemListActivity parent,
-                                      boolean twoPane) {
+        SimpleItemRecyclerViewAdapter(ItemListActivity parent, boolean twoPane) {
             mValues = new ArrayList<>();
             mParentActivity = parent;
             mTwoPane = twoPane;
@@ -132,8 +131,8 @@ public class ItemListActivity extends AppCompatActivity {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_list_content, parent, false);
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+            View view = inflater.inflate(R.layout.item_list_content, parent, false);
             return new ViewHolder(view);
         }
 
@@ -151,7 +150,7 @@ public class ItemListActivity extends AppCompatActivity {
             return mValues.size();
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
+        static class ViewHolder extends RecyclerView.ViewHolder {
             final TextView mIdView;
             final TextView mContentView;
 
