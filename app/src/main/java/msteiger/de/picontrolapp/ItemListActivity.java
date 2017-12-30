@@ -1,21 +1,23 @@
 package msteiger.de.picontrolapp;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
-
 
 import msteiger.de.picontrolapp.dummy.RelayInfo;
 
@@ -38,6 +40,7 @@ public class ItemListActivity extends AppCompatActivity {
      * device.
      */
     private boolean mTwoPane;
+    private final RestService restService = new RestService("http://msteiger-pc:8080/");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,9 +85,50 @@ public class ItemListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull final RecyclerView recyclerView) {
+
+        View parentLayout = findViewById(android.R.id.content);
+        final Snackbar snackbar = Snackbar.make(parentLayout, "Loading relay data", Snackbar.LENGTH_INDEFINITE);
+
         final SimpleItemRecyclerViewAdapter adapter = new SimpleItemRecyclerViewAdapter(this, mTwoPane);
-        final HttpRequestTask task = new HttpRequestTask(adapter);
+        final AsyncTask<Void, Void, List<RelayInfo>> task = new AsyncTask<Void, Void, List<RelayInfo>>() {
+
+            private volatile Exception exception;
+
+            @Override
+            protected List<RelayInfo> doInBackground(Void... params) {
+                try {
+                    List<RelayInfo> relays = restService.getAllRelays();
+                    return relays;
+                } catch (Exception e) {
+                    this.exception = e;
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(List<RelayInfo> relays) {
+                if (relays != null) {
+                    adapter.setData(relays);
+                    snackbar.dismiss();
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ItemListActivity.this);
+                    builder.setMessage(getString(R.string.connection_failed_msg) + ": " + String.valueOf(exception));
+                    builder.setTitle(R.string.error_dialog_title);
+                    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ItemListActivity.this.finish();
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.setCancelable(false);
+                    dialog.show();
+                }
+            }
+        };
+
         recyclerView.setAdapter(adapter);
+        snackbar.show();
         task.execute();
     }
 
@@ -116,6 +160,13 @@ public class ItemListActivity extends AppCompatActivity {
             }
         };
 
+        private final View.OnClickListener toggleButtonClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String id = (String) view.getTag();
+            }
+        };
+
         SimpleItemRecyclerViewAdapter(ItemListActivity parent, boolean twoPane) {
             mValues = new ArrayList<>();
             mParentActivity = parent;
@@ -138,10 +189,14 @@ public class ItemListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mIdView.setText(mValues.get(position).getName());
-            holder.mContentView.setText("content");
+            RelayInfo info = mValues.get(position);
 
-            holder.itemView.setTag(mValues.get(position));
+            holder.textView.setText(info.getName());
+
+            holder.toggleButton.setTag(info.getId());
+            holder.toggleButton.setOnClickListener(toggleButtonClickListener);
+
+            holder.itemView.setTag(info);
             holder.itemView.setOnClickListener(mOnClickListener);
         }
 
@@ -151,13 +206,13 @@ public class ItemListActivity extends AppCompatActivity {
         }
 
         static class ViewHolder extends RecyclerView.ViewHolder {
-            final TextView mIdView;
-            final TextView mContentView;
+            final TextView textView;
+            final ImageButton toggleButton;
 
             ViewHolder(View view) {
                 super(view);
-                mIdView = (TextView) view.findViewById(R.id.id_text);
-                mContentView = (TextView) view.findViewById(R.id.content);
+                textView = (TextView) view.findViewById(R.id.id_text);
+                toggleButton = (ImageButton) view.findViewById(R.id.id_toggle);
             }
         }
     }
