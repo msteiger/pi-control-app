@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,19 +45,17 @@ public class ItemDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String id = getArguments().getString(ARG_ITEM_ID);
-        if (id != null) {
-            loadRelay(id);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.item_detail, container, false);
-        return rootView;
-    }
 
-    private void loadRelay(String id) {
+        String id = getArguments().getString(ARG_ITEM_ID);
+
+        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.trigger_view);
+        final TriggerViewAdapter adapter = new TriggerViewAdapter(this);
+
         final AsyncTask<String, Void, RelayInfo> task = new AsyncTask<String, Void, RelayInfo>() {
 
             private volatile Exception exception;
@@ -78,15 +77,19 @@ public class ItemDetailFragment extends Fragment {
                     String msg = getString(R.string.connection_failed_msg);
                     Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
                 } else {
-                    showRelay(relay);
+                    showRelay(relay, adapter);
                 }
 
             }
         };
+
+        recyclerView.setAdapter(adapter);
         task.execute(id);
+
+        return rootView;
     }
 
-    private void showRelay(RelayInfo relayInfo) {
+    private void showRelay(RelayInfo relayInfo, TriggerViewAdapter adapter) {
         this.relayInfo = relayInfo;
         Activity activity = this.getActivity();
 
@@ -95,7 +98,8 @@ public class ItemDetailFragment extends Fragment {
         if (appBarLayout != null) {
             appBarLayout.setTitle(relayInfo.getName());
         }
-        ((TextView) view.findViewById(R.id.item_detail)).setText(relayInfo.getTriggers().toString());
+        ((TextView) view.findViewById(R.id.item_detail_text)).setText("GPIO Pin: " + relayInfo.getGpioPin());
 
+        adapter.setData(relayInfo.getTriggers());
     }
 }

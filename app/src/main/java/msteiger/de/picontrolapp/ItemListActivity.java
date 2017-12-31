@@ -117,29 +117,8 @@ public class ItemListActivity extends AppCompatActivity {
     }
 
     void toggleRelay(String id) {
-        final AsyncTask<String, Void, Void> task = new AsyncTask<String, Void, Void>() {
-
-            private volatile Exception exception;
-
-            @Override
-            protected Void doInBackground(String... params) {
-                try {
-                    String id = params[0];
-                    restService.toggleRelay(id);
-                } catch (Exception e) {
-                    this.exception = e;
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void relays) {
-                if (exception != null) {
-                    String msg = getString(R.string.connection_failed_msg);
-                    Toast.makeText(ItemListActivity.this, msg, Toast.LENGTH_LONG).show();
-                }
-            }
-        };
+        AsyncTask<String, Void, Void> task = new ToggleRelayTask(this, restService);
         task.execute(id);
     }
+
 }

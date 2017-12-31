@@ -19,7 +19,7 @@ import msteiger.de.picontrolapp.dummy.RelayInfo;
 class ItemListViewAdapter extends RecyclerView.Adapter<ItemListViewAdapter.ViewHolder> {
 
     private final ItemListActivity mParentActivity;
-    private final List<RelayInfo> mValues;
+    private final List<RelayInfo> mValues = new ArrayList<>();
     private final boolean mTwoPane;
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
@@ -52,7 +52,6 @@ class ItemListViewAdapter extends RecyclerView.Adapter<ItemListViewAdapter.ViewH
     };
 
     ItemListViewAdapter(ItemListActivity parent, boolean twoPane) {
-        mValues = new ArrayList<>();
         mParentActivity = parent;
         mTwoPane = twoPane;
     }
