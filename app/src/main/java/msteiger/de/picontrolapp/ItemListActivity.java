@@ -34,7 +34,7 @@ public class ItemListActivity extends AppCompatActivity {
      * device.
      */
     private boolean mTwoPane;
-    private final RestService restService = new RestService("http://msteiger-pc:8080/");
+    private final RestService restService = new RestService(PiConfig.instance.getTargetUrl());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

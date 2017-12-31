@@ -41,6 +41,12 @@ public class RestService {
         return relayInfos;
     }
 
+    public RelayInfo getRelay(String id) {
+        String url = baseUrl + RELAYS + "/" + id;
+        RelayInfo relayInfo = restTemplate.getForObject(url, RelayInfo.class);
+        return relayInfo;
+    }
+
     public void toggleRelay(String id) {
         String url = baseUrl + RELAYS + "/" + id + "/toggle";
         restTemplate.postForObject(url, null, void.class);
