@@ -12,10 +12,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class TriggerTime {
 
     private Set<DayOfWeek> weekDays;
-    private String time;
+    private LocalTime time;
 
     @JsonCreator
-    public TriggerTime(@JsonProperty("weekDays") Set<DayOfWeek> weekDays, @JsonProperty("time") String time) {
+    public TriggerTime(@JsonProperty("weekDays") Set<DayOfWeek> weekDays, @JsonProperty("time") LocalTime time) {
         this.weekDays = weekDays;
         this.time = time;
     }
@@ -35,13 +35,13 @@ public class TriggerTime {
     /**
      * @return the time
      */
-    public String getTime() {
+    public LocalTime getTime() {
         return time;
     }
     /**
      * @param time the time to set
      */
-    public void setTime(String time) {
+    public void setTime(LocalTime time) {
         this.time = time;
     }
 

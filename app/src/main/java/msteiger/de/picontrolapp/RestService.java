@@ -21,7 +21,7 @@ public class RestService {
 
     public RestService(String url) {
         this.baseUrl = url;
-        if (baseUrl.endsWith("/")) {
+        if (!baseUrl.endsWith("/")) {
             baseUrl += "/";
         }
 
