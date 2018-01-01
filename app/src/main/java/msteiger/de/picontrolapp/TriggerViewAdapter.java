@@ -84,6 +84,14 @@ class TriggerViewAdapter extends RecyclerView.Adapter<TriggerViewAdapter.ViewHol
             textView = (TextView) view.findViewById(R.id.time_label);
             timeClock = (EditText) view.findViewById(R.id.time_text);
             String packageName = view.getContext().getPackageName();
+            timeClock.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (hasFocus) {
+                        timeClock.callOnClick();
+                    }
+                }
+            });
             timeClock.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
