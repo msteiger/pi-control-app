@@ -24,7 +24,7 @@
             tools:text="@string/gpio_pin" />
 
         <Spinner
-            android:id="@+id/planets_spinner"
+            android:id="@+id/gpio_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:entries="@array/pin_array" />

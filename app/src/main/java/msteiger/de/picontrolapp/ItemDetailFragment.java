@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +55,22 @@ public class ItemDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.item_detail, container, false);
 
         String id = getArguments().getString(ARG_ITEM_ID);
+
+        Spinner spinner = (Spinner) rootView.findViewById(R.id.gpio_spinner);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (relayInfo != null) {
+                    relayInfo.setGpioPin(position);
+                    saveData();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // do nothing
+            }
+        });
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.trigger_view);
         final TriggerViewAdapter adapter = new TriggerViewAdapter(this);
@@ -99,7 +117,8 @@ public class ItemDetailFragment extends Fragment {
         if (appBarLayout != null) {
             appBarLayout.setTitle(relayInfo.getName());
         }
-        ((TextView) view.findViewById(R.id.item_detail_text)).setText("GPIO Pin: " + relayInfo.getGpioPin());
+        Spinner spinner = (Spinner) view.findViewById(R.id.gpio_spinner);
+        spinner.setSelection(relayInfo.getGpioPin());
 
         adapter.setData(relayInfo.getTriggers());
     }

@@ -5,9 +5,10 @@
     <string name="toggle">Toggle</string>
     <string name="time">Time</string>
     <string name="error_dialog_title">Error</string>
-    <string name="gpio_pin">GPIO Output:</string>
+    <string name="gpio_pin">GPIO Output</string>
     <string name="connection_failed_msg">Could not connect</string>
     <string-array name="pin_array">
+        <item>Pin 0</item>
         <item>Pin 1</item>
         <item>Pin 2</item>
         <item>Pin 3</item>
@@ -15,6 +16,5 @@
         <item>Pin 5</item>
         <item>Pin 6</item>
         <item>Pin 7</item>
-        <item>Pin 8</item>
     </string-array>
 </resources>
