@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
-        android:text="Time"
+        android:text="Time:"
         android:textAppearance="?attr/textAppearanceListItem" />
 
     <LinearLayout
@@ -20,32 +20,47 @@
         android:orientation="horizontal">
 
         <ToggleButton
-            android:id="@+id/toggleButton"
+            android:id="@+id/toggleButton1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="ToggleButton" />
+            android:checked="false" />
 
         <ToggleButton
             android:id="@+id/toggleButton2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="ToggleButton" />
+            android:layout_weight="1" />
 
         <ToggleButton
             android:id="@+id/toggleButton3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="ToggleButton" />
+            android:layout_weight="1"/>
 
         <ToggleButton
             android:id="@+id/toggleButton4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="ToggleButton" />
+            android:layout_weight="1" />
+
+        <ToggleButton
+            android:id="@+id/toggleButton5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <ToggleButton
+            android:id="@+id/toggleButton6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <ToggleButton
+            android:id="@+id/toggleButton7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
 
     </LinearLayout>
 

@@ -51,4 +51,9 @@ public class RestService {
         String url = baseUrl + RELAYS + "/" + id + "/toggle";
         restTemplate.postForObject(url, null, void.class);
     }
+
+    public void setRelay(RelayInfo relay) {
+        String url = baseUrl + RELAYS;
+        restTemplate.postForObject(url, relay, Void.class);
+    }
 }

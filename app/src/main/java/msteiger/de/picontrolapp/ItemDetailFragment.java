@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import msteiger.de.picontrolapp.dummy.RelayInfo;
+import msteiger.de.picontrolapp.dummy.TriggerTime;
 
 /**
  * A fragment representing a single Item detail screen.
@@ -101,5 +102,33 @@ public class ItemDetailFragment extends Fragment {
         ((TextView) view.findViewById(R.id.item_detail_text)).setText("GPIO Pin: " + relayInfo.getGpioPin());
 
         adapter.setData(relayInfo.getTriggers());
+    }
+
+    public void saveData() {
+        final AsyncTask<RelayInfo, Void, Void> task = new AsyncTask<RelayInfo, Void, Void>() {
+
+            private volatile Exception exception;
+
+            @Override
+            protected Void doInBackground(RelayInfo... params) {
+                try {
+                    restService.setRelay(params[0]);
+                } catch (Exception e) {
+                    this.exception = e;
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void relay) {
+                if (exception != null) {
+                    String msg = getString(R.string.connection_failed_msg);
+                    Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+                }
+
+            }
+        };
+
+        task.execute(relayInfo);
     }
 }

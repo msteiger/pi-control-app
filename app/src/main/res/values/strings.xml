@@ -3,6 +3,7 @@
     <string name="title_item_detail">Item Detail</string>
     <string name="settings_title">Settings</string>
     <string name="toggle">Toggle</string>
+    <string name="time">Time</string>
     <string name="error_dialog_title">Error</string>
     <string name="connection_failed_msg">Could not connect</string>
 </resources>
