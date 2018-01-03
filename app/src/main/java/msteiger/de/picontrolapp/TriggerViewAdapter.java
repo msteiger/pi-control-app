@@ -20,6 +20,7 @@ import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -33,17 +34,15 @@ class TriggerViewAdapter extends RecyclerView.Adapter<TriggerViewAdapter.ViewHol
 
     private final ItemDetailFragment itemDetailFragment;
 
-    private final List<TriggerTime> mValues = new ArrayList<>();
+    private List<TriggerTime> mValues = Collections.emptyList();
 
     TriggerViewAdapter(ItemDetailFragment itemDetailFragment) {
         this.itemDetailFragment = itemDetailFragment;
     }
 
-    public void setData(Collection<TriggerTime> infos) {
-        mValues.clear();
-        notifyItemRangeRemoved(0, mValues.size());
-        mValues.addAll(infos);
-        notifyItemRangeInserted(0,mValues.size());
+    public void setData(List<TriggerTime> infos) {
+        mValues = infos;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -57,7 +56,6 @@ class TriggerViewAdapter extends RecyclerView.Adapter<TriggerViewAdapter.ViewHol
     public void onBindViewHolder(final ViewHolder holder, int position) {
         TriggerTime info = mValues.get(position);
 
-        String time = holder.textView.getResources().getString(R.string.time);
         holder.timeClock.setText(info.getTime().toString());
         holder.trigger = info;
         for (int i = 0; i < 7; i++) {
@@ -74,17 +72,26 @@ class TriggerViewAdapter extends RecyclerView.Adapter<TriggerViewAdapter.ViewHol
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        final TextView textView;
         final List<ToggleButton> dayButtons = new ArrayList<>(7);
         final EditText timeClock;
+        final ImageButton deleteButton;
 
         TriggerTime trigger;
 
         ViewHolder(View view) {
             super(view);
-            textView = (TextView) view.findViewById(R.id.time_label);
+            deleteButton = (ImageButton) view.findViewById(R.id.delete_button);
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int index = getAdapterPosition();
+                    mValues.remove(index);
+                    TriggerViewAdapter.this.notifyItemRemoved(index);
+                    itemDetailFragment.saveData();
+                }
+            });
+
             timeClock = (EditText) view.findViewById(R.id.time_text);
-            String packageName = view.getContext().getPackageName();
             timeClock.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
@@ -114,6 +121,7 @@ class TriggerViewAdapter extends RecyclerView.Adapter<TriggerViewAdapter.ViewHol
                 }
             });
 
+            String packageName = view.getContext().getPackageName();
             String[] weekdays = new DateFormatSymbols(Locale.getDefault()).getShortWeekdays();
 
             for (int i = 1; i <= 7; i++) {

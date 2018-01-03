@@ -10,10 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.EnumSet;
+import java.util.Set;
+
+import msteiger.de.picontrolapp.dummy.DayOfWeek;
+import msteiger.de.picontrolapp.dummy.LocalTime;
 import msteiger.de.picontrolapp.dummy.RelayInfo;
 import msteiger.de.picontrolapp.dummy.TriggerTime;
 
@@ -36,6 +42,8 @@ public class ItemDetailFragment extends Fragment {
      * The content this fragment is presenting.
      */
     private RelayInfo relayInfo;
+
+    private RecyclerView recyclerView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -72,7 +80,7 @@ public class ItemDetailFragment extends Fragment {
             }
         });
 
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.trigger_view);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.trigger_view);
         final TriggerViewAdapter adapter = new TriggerViewAdapter(this);
 
         final AsyncTask<String, Void, RelayInfo> task = new AsyncTask<String, Void, RelayInfo>() {
@@ -108,7 +116,7 @@ public class ItemDetailFragment extends Fragment {
         return rootView;
     }
 
-    private void showRelay(RelayInfo relayInfo, TriggerViewAdapter adapter) {
+    private void showRelay(final RelayInfo relayInfo, final TriggerViewAdapter adapter) {
         this.relayInfo = relayInfo;
         Activity activity = this.getActivity();
 
@@ -119,6 +127,20 @@ public class ItemDetailFragment extends Fragment {
         }
         Spinner spinner = (Spinner) view.findViewById(R.id.gpio_spinner);
         spinner.setSelection(relayInfo.getGpioPin());
+
+        Button addTrigger = (Button) view.findViewById(R.id.add_trigger_button);
+        addTrigger.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Set<DayOfWeek> days = EnumSet.allOf(DayOfWeek.class);
+                LocalTime time = new LocalTime(12, 0);
+                TriggerTime tt = new TriggerTime(days, time);
+                relayInfo.getTriggers().add(tt);
+                int index = relayInfo.getTriggers().size() - 1;
+                adapter.notifyItemInserted(index);
+                saveData();
+            }
+        });
 
         adapter.setData(relayInfo.getTriggers());
     }
