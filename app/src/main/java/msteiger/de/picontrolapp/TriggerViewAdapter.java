@@ -22,6 +22,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import msteiger.de.picontrolapp.dummy.DayOfWeek;
 import msteiger.de.picontrolapp.dummy.LocalTime;
@@ -96,13 +97,16 @@ class TriggerViewAdapter extends RecyclerView.Adapter<TriggerViewAdapter.ViewHol
                 @Override
                 public void onClick(View v) {
                     TimePickerDialog mTimePicker;
-                    mTimePicker = new TimePickerDialog(itemDetailFragment.getContext(), new TimePickerDialog.OnTimeSetListener() {
+                    mTimePicker = new TimePickerDialog(itemDetailFragment.getContext(),
+                            new TimePickerDialog.OnTimeSetListener() {
                         @Override
                         public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                             LocalTime time = new LocalTime(selectedHour, selectedMinute);
-                            trigger.setTime(time);
-                            timeClock.setText(time.toString());
-                            itemDetailFragment.saveData();
+                            if (!Objects.equals(trigger.getTime(), time)){
+                                trigger.setTime(time);
+                                timeClock.setText(time.toString());
+                                itemDetailFragment.saveData();
+                            }
                         }
                     }, trigger.getTime().getHours(), trigger.getTime().getMins(), true);
                     mTimePicker.setTitle("Select Time");

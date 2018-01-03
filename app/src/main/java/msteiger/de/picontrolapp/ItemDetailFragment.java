@@ -60,7 +60,7 @@ public class ItemDetailFragment extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (relayInfo != null) {
+                if (relayInfo != null && relayInfo.getGpioPin() != position) {
                     relayInfo.setGpioPin(position);
                     saveData();
                 }

@@ -57,4 +57,28 @@ public class LocalTime {
     public String toString() {
         return String.format("%02d:%02d", hours, mins);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        LocalTime localTime = (LocalTime) o;
+
+        if (hours != localTime.hours) {
+            return false;
+        }
+        return mins == localTime.mins;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = hours;
+        result = 31 * result + mins;
+        return result;
+    }
 }
