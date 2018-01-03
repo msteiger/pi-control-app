@@ -25,10 +25,24 @@
             android:id="@+id/time_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
+            android:layout_marginBottom="@dimen/text_margin"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="@dimen/text_margin"
             android:layout_weight="1"
-            android:ems="10"
-            android:editable="false" />
+            android:editable="false"
+            android:ems="10" />
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/text_margin"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="@dimen/text_margin"
+            android:layout_weight="1"
+            app:srcCompat="@android:drawable/ic_menu_delete" />
 
     </LinearLayout>
 
