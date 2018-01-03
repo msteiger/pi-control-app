@@ -36,7 +36,7 @@ public class ItemDetailFragment extends Fragment {
      */
     public static final String ARG_ITEM_ID = "item_id";
 
-    private final RestService restService = new RestService(PiConfig.instance.getTargetUrl());
+    private final RestService restService = new RestService(getActivity());
 
     /**
      * The content this fragment is presenting.
@@ -171,5 +171,10 @@ public class ItemDetailFragment extends Fragment {
         };
 
         task.execute(relayInfo);
+    }
+
+    public void toggleRelay() {
+        AsyncTask<String, Void, Void> task = new ToggleRelayTask(getContext(), restService);
+        task.execute(relayInfo.getId());
     }
 }

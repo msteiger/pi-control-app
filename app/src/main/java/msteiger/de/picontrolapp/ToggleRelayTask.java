@@ -1,6 +1,7 @@
 package msteiger.de.picontrolapp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
@@ -10,13 +11,13 @@ import msteiger.de.picontrolapp.RestService;
 
 class ToggleRelayTask extends AsyncTask<String, Void, Void> {
 
-    private final Activity parent;
+    private final Context parent;
 
     private final RestService restService;
 
     private volatile Exception exception;
 
-    ToggleRelayTask(Activity parent, RestService restService) {
+    ToggleRelayTask(Context parent, RestService restService) {
         this.restService = restService;
         this.parent = parent;
     }

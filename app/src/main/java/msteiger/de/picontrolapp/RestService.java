@@ -1,5 +1,11 @@
 package msteiger.de.picontrolapp;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
+
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -13,14 +19,27 @@ import msteiger.de.picontrolapp.dummy.RelayInfo;
 public class RestService {
 
     private static final int TIMEOUT_MS = 5000;
+    public static final String PREF_WEBSERVER_URL = "webserver_url";
 
     private final RestTemplate restTemplate;
     private String baseUrl;
 
     private static final String RELAYS = "relays";
 
-    public RestService(String url) {
-        this.baseUrl = url;
+    public RestService(Context context) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        this.baseUrl = sharedPref.getString(PREF_WEBSERVER_URL, "");
+
+        sharedPref.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
+
+            @Override
+            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+                if (key.equals(PREF_WEBSERVER_URL)) {
+                    baseUrl = sharedPreferences.getString(key, "");
+                }
+            }
+        });
+
         if (!baseUrl.endsWith("/")) {
             baseUrl += "/";
         }

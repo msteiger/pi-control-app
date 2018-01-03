@@ -19,8 +19,6 @@ import android.view.MenuItem;
  */
 public class ItemDetailActivity extends AppCompatActivity {
 
-    private final RestService restService = new RestService(PiConfig.instance.getTargetUrl());
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,15 +27,6 @@ public class ItemDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         final String itemId = getIntent().getStringExtra(ItemDetailFragment.ARG_ITEM_ID);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AsyncTask<String, Void, Void> task = new ToggleRelayTask(ItemDetailActivity.this, restService);
-                task.execute(itemId);
-            }
-        });
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
@@ -60,13 +49,23 @@ public class ItemDetailActivity extends AppCompatActivity {
             Bundle arguments = new Bundle();
             arguments.putString(ItemDetailFragment.ARG_ITEM_ID, itemId);
 
-            ItemDetailFragment fragment = new ItemDetailFragment();
+            final ItemDetailFragment fragment = new ItemDetailFragment();
             fragment.setArguments(arguments);
 
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.item_detail_container, fragment)
                     .commit();
+
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    fragment.toggleRelay();
+                }
+            });
+
         }
+
     }
 
     @Override
