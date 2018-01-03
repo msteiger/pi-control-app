@@ -8,6 +8,7 @@
     <string name="gpio_pin">GPIO Output:</string>
     <string name="add_trigger_text">Add trigger ..</string>
     <string name="connection_failed_msg">Could not connect</string>
+    <string name="title_preferences">Preferences</string>
     <string-array name="pin_array">
         <item>Pin 0</item>
         <item>Pin 1</item>

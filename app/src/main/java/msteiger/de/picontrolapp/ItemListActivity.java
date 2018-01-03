@@ -1,10 +1,9 @@
 package msteiger.de.picontrolapp;
 
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -14,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import msteiger.de.picontrolapp.dummy.DialogHelper;
 import msteiger.de.picontrolapp.dummy.RelayInfo;
@@ -80,8 +78,8 @@ public class ItemListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                Snackbar.make(null, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent i = new Intent(this, PreferencesActivity.class);
+                startActivity(i);
                 return true;
         }
         return false;
