@@ -20,8 +20,8 @@
             android:layout_height="wrap_content"
             android:padding="16dp"
             android:textIsSelectable="true"
-            tools:context="msteiger.de.picontrolapp.ItemDetailFragment"
-            tools:text="@string/gpio_pin" />
+            android:text="@string/gpio_pin"
+            tools:context="msteiger.de.picontrolapp.ItemDetailFragment" />
 
         <Spinner
             android:id="@+id/gpio_spinner"
